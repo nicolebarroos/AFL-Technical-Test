@@ -1,4 +1,4 @@
-from domain.entities.contract import Contract
+from src.domain.entities.contract import Contract
 from datetime import datetime
 
 def test_create_contract():

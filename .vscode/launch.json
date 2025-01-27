@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "FastAPI (Uvicorn)",
+            "type": "python",
+            "request": "launch",
+            // Informamos que vamos rodar via módulo
+            "module": "uvicorn",
+            // Os argumentos são semelhantes ao que você usaria no terminal
+            "args": [
+                "src.main:app",     // Ajuste para o local do seu FastAPI, ex.: main:app
+                "--host", "0.0.0.0",
+                "--port", "8000",
+                "--reload"          // Auto-reload em ambiente de dev
+            ],
+            // Variáveis de ambiente
+            "env": {
+                "ENVIRONMENT": "development"
+            },
+            // Se estiver usando um .env específico, pode usar "envFile"
+            "envFile": "${workspaceFolder}/.env",
+            // Se quiser permitir templates Jinja (não é comum em FastAPI, mas pode ter)
+            "jinja": true
+        }
+    ]
+}

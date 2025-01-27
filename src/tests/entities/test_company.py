@@ -1,4 +1,4 @@
-from domain.entities.company import Company
+from src.domain.entities.company import Company
 
 def test_create_company():
     company = Company(
