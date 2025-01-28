@@ -40,3 +40,4 @@ class ContractRepository(IContractRepository):
 
     def get_contract_by_id(self, contract_id: int) -> Optional[Contract]:
         return self.db.query(Contract).filter(Contract.id == contract_id).first()
+
