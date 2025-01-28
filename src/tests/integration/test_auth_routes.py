@@ -9,10 +9,9 @@ def generate_email():
     return f"test_{uuid.uuid4().hex}@example.com"
 
 def test_register_user_success():
-    response = client.post("/register", json={
-        "email": generate_email(),
-        "password": "123456"
-    })
+    email = generate_email()
+    response = client.post("/auth/register", json={"email": email, "password": "securepassword"})
+
     assert response.status_code == 200, response.text
     data = response.json()
     assert "id" in data
@@ -22,18 +21,18 @@ def test_register_user_success():
 def test_register_user_email_in_use():
     email = generate_email()
 
-    first = client.post("/register", json={"email": email, "password": "123456"})
+    first = client.post("/auth/register", json={"email": email, "password": "123456"})
     assert first.status_code == 200
 
-    second = client.post("/register", json={"email": email, "password": "123456"})
+    second = client.post("/auth/register", json={"email": email, "password": "123456"})
     assert second.status_code == 400
     assert second.json()["detail"] == "Email já cadastrado"
 
 def test_login_success():
     email = generate_email()
-    client.post("/register", json={"email": email, "password": "123456"})
+    client.post("/auth/register", json={"email": email, "password": "123456"})
 
-    login = client.post("/login", json={"email": email, "password": "123456"})
+    login = client.post("/auth/login", json={"email": email, "password": "123456"})
     assert login.status_code == 200, login.text
 
     token_data = login.json()
@@ -41,6 +40,6 @@ def test_login_success():
     assert token_data["token_type"] == "bearer"
 
 def test_login_invalid_credentials():
-    resp = client.post("/login", json={"email": "nope@example.com", "password": "wrong"})
+    resp = client.post("/auth/login", json={"email": "nope@example.com", "password": "wrong"})
     assert resp.status_code == 401
     assert resp.json()["detail"] == "Invalid credentials"

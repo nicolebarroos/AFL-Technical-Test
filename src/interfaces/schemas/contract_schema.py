@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
 from typing import Optional, Dict, List
 
@@ -7,29 +7,45 @@ class ContractCreate(BaseModel):
     signing_date: str
     fee: float
     company_id: int
-    services: Optional[Dict[str, List[str]]] = Field(
-        default=None,
-        example={
-            "Department A": ["COMPRA", "VENDA"],
-            "Department B": ["TROCA"]
-        },
+    services: Optional[Dict[str, List[str]]] = Field(default=None)
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [
+                {
+                    "validity_date": "2025-01-01",
+                    "signing_date": "2025-01-06",
+                    "fee": 100.0,
+                    "company_id": 1,
+                    "services": {
+                        "Department A": ["COMPRA", "VENDA"],
+                        "Department B": ["TROCA"]
+                    },
+                }
+            ]
+        }
     )
 
 class ContractResponse(BaseModel):
-    validity_date: datetime = Field(..., example="2025-01-01T00:00:00")
-    signing_date: datetime = Field(..., example="2025-06-01T00:00:00")
-    fee: float = Field(..., gt=0, example=5.0)
-    company_id: int = Field(..., example=1)
-    services: Optional[Dict[str, List[str]]] = Field(
-        default={
-            "Department A": ["COMPRA", "VENDA", "TROCA"],
-            "Department B": ["COMPRA", "VENDA", "TROCA"],
-        },
-        example={
-            "Department A": ["COMPRA"],
-            "Department B": ["VENDA", "TROCA"]
-        },
-    )
+    validity_date: datetime
+    signing_date: datetime
+    fee: float
+    company_id: int
+    services: Optional[Dict[str, List[str]]] = Field(default=None)
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [
+                {
+                    "validity_date": "2025-01-01T00:00:00",
+                    "signing_date": "2025-06-01T00:00:00",
+                    "fee": 5.0,
+                    "company_id": 1,
+                    "services": {
+                        "Department A": ["COMPRA"],
+                        "Department B": ["VENDA", "TROCA"]
+                    },
+                }
+            ]
+        }
+    )
