@@ -22,10 +22,3 @@ def create_contract(request: ContractCreate, use_case: ContractUseCase = Depends
 @router.get("/list_contracts", response_model=List[ContractResponse])
 def list_contracts(use_case: ContractUseCase = Depends(get_contract_use_case)):
     return use_case.list_contracts()
-
-@router.delete("/delete_contract/{contract_id}")
-def delete_contract(contract_id: int, use_case: ContractUseCase = Depends(get_contract_use_case)):
-    success = use_case.delete_contract(contract_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Contract not found")
-    return {"message": "Contract deleted"}
