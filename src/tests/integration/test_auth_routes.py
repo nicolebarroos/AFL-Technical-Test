@@ -1,4 +1,3 @@
-# tests/integration/test_auth_routes.py
 import pytest
 from fastapi.testclient import TestClient
 from src.main import app

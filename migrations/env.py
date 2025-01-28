@@ -4,26 +4,22 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-# Se quiser carregar .env
 from dotenv import load_dotenv
 load_dotenv()
 
-# Importando seu Base
 from src.infrastructure.database import Base
-from src.domain.entities.user import User  # Forçar import
-# Este é o objeto de configuração do Alembic
+from src.domain.entities.user import User 
+from src.domain.entities.company import Company
+from src.domain.entities.contract import Contract
 config = context.config
 
-# (Opcional) Se quiser injetar a URL do banco via env:
 DATABASE_URL = os.getenv("DATABASE_URL")
 if DATABASE_URL:
     config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
-# Leitura do arquivo de config para logging
 fileConfig(config.config_file_name)
 print(">>> Tabelas registradas no Base:", Base.metadata.tables.keys())
 
-# Definindo quais metadados o Alembic deve rastrear
 target_metadata = Base.metadata
 
 def run_migrations_offline():

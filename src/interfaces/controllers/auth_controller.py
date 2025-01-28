@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from src.interfaces.schemas import UserResponse
+from src.interfaces.schemas.user_schema import UserResponse
 from src.infrastructure.dependencies import get_auth_use_case
 from src.application.use_cases.auth_use_case import AuthUseCase
 from src.domain.entities.user import User
