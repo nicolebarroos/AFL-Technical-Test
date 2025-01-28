@@ -4,8 +4,8 @@ from src.infrastructure.database import db_instance
 from sqlalchemy.exc import IntegrityError
 
 class UserRepositoryImpl(UserRepository):
-    def __init__(self):
-        self.db = db_instance.get_session()
+    def __init__(self, db):
+        self.db = db
 
     def get_user_by_email(self, email: str) -> User:
         return self.db.query(User).filter(User.email == email).first()

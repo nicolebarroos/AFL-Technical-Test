@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
+from src.infrastructure.auth import get_current_user
 from src.interfaces.schemas.company_schema import CompanyCreate, CompanyResponse
 from src.application.use_cases.company_use_case import CompanyUseCase
 from src.infrastructure.dependencies import get_company_use_case
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 @router.post("/create_company", response_model=CompanyResponse)
 def create_company(
