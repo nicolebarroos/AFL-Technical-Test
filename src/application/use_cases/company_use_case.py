@@ -23,4 +23,11 @@ class CompanyUseCase:
         return self.company_repository.get_companies()
 
     def delete_company(self, company_id: int) -> bool:
-        return self.company_repository.delete_company(company_id)
+        company = self.company_repository.get_company_by_id(company_id)
+        if not company:
+            return False
+        try:
+            self.company_repository.delete_company(company_id)
+            return True
+        except Exception as e:
+            raise ValueError(f"Erro ao excluir a empresa: {str(e)}")

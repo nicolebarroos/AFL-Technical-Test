@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, File, Form, UploadFile
 from typing import List
 from src.infrastructure.auth import get_current_user
-from src.interfaces.schemas.company_schema import CompanyCreate, CompanyResponse
+from src.interfaces.schemas.company_schema import CompanyResponse
 from src.application.use_cases.company_use_case import CompanyUseCase
 from src.infrastructure.dependencies import get_company_use_case
+from sqlalchemy.exc import IntegrityError
 import os
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
@@ -43,16 +44,28 @@ def create_company(
             logo=file_path
         )
         return company
+    except IntegrityError as e:
+        if "duplicate key value violates unique constraint" in str(e.orig):
+            raise HTTPException(status_code=400, detail="CNPJ já existe no sistema.")
+        raise HTTPException(status_code=500, detail="Erro ao processar a solicitação.")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro inesperado: {str(e)}")
 
 @router.get("/list_companies", response_model=List[CompanyResponse])
 def list_companies(use_case: CompanyUseCase = Depends(get_company_use_case)):
-    return use_case.list_companies()
+    try:
+        return use_case.list_companies()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching companies: {str(e)}")
 
 @router.delete("/delete_company/{company_id}")
 def delete_company(company_id: int, use_case: CompanyUseCase = Depends(get_company_use_case)):
-    success = use_case.delete_company(company_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="Company not found")
-    return {"message": "Company deleted"}
+    try:
+        success = use_case.delete_company(company_id)
+        if not success:
+            raise HTTPException(status_code=404, detail="Company not found")
+        return {"message": "Company deleted"}
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
