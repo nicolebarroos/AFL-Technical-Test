@@ -5,7 +5,7 @@ from src.main import app
 from src.infrastructure.dependencies import get_company_use_case
 from src.application.use_cases.company_use_case import CompanyUseCase
 from src.infrastructure.auth import create_access_token
-
+import io
 
 @pytest.fixture
 def mock_company_repository():
@@ -47,22 +47,39 @@ def client(mock_company_use_case):
 
 def test_create_company_success(client, mock_auth_token, mock_company_repository):
     """Testa a criação de uma empresa com sucesso usando mocks."""
+
+    mock_company_repository.create_company.return_value = {
+        "id": 1,
+        "nickname": "EmpresaX",
+        "trade_name": "Empresa X Soluções",
+        "legal_name": "Empresa X Soluções LTDA",
+        "cnpj": "1234567890123",
+        "uf": "CE",
+        "city": "Fortaleza",
+        "logo": "uploaded_images/empresaX.png",
+        "created_at": "2025-01-01T00:00:00"
+    }
+
+    logo_file = io.BytesIO(b"fake image content")
+    logo_file.name = "empresaX.png"
+
     response = client.post(
         "/companies/create_company",
-        json={
+        data={
             "nickname": "EmpresaX",
             "trade_name": "Empresa X Soluções",
             "legal_name": "Empresa X Soluções LTDA",
             "cnpj": "1234567890123",
             "uf": "CE",
-            "city": "Fortaleza",
-            "logo": "empresaX.png"
+            "city": "Fortaleza"
         },
+        files={"logo": (logo_file.name, logo_file, "image/png")},
         headers={"Authorization": f"Bearer {mock_auth_token}"}
     )
 
     assert response.status_code == 200, f"Falha: {response.json()}"
     data = response.json()
+
     assert data["nickname"] == "EmpresaX"
     assert data["cnpj"] == "1234567890123"
 
@@ -78,7 +95,7 @@ def test_create_company_success(client, mock_auth_token, mock_company_repository
     assert received_data.cnpj == "1234567890123"
     assert received_data.uf == "CE"
     assert received_data.city == "Fortaleza"
-    assert received_data.logo == "empresaX.png"
+    assert received_data.logo == "uploaded_images/empresaX.png"
     
 def test_list_companies_success(client, mock_auth_token, mock_company_repository):
     """Testa a listagem de empresas com sucesso."""

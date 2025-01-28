@@ -2,3 +2,5 @@
 __pycache__/
 .venv/
 poetry.lock
+.vscode
+uploaded_images/
