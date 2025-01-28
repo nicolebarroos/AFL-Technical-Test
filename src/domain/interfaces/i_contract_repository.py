@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, Dict
 from src.domain.entities.contract import Contract
-
+from sqlalchemy.orm import Session
 class IContractRepository(ABC):
     @abstractmethod
     def create_contract(self, contract: Contract, company_id: int) -> Optional[Contract]:
@@ -9,8 +9,8 @@ class IContractRepository(ABC):
         pass
 
     @abstractmethod
-    def get_contracts(self) -> List[Contract]:
-        """Retorna a lista de todos os contratos."""
+    def list_contracts(self, db: Session, page: int = 1, page_size: int = 10, sort_by: str = "signing_date",order: str = "asc") -> Dict:
+        """Lista contratoa com paginação e ordenação."""
         pass
 
     @abstractmethod

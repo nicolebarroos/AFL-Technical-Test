@@ -1,9 +1,9 @@
-from typing import List, Optional
+from typing import Optional
 from src.domain.entities.contract import Contract
 from src.domain.entities.company import Company
 from src.domain.interfaces.i_contract_repository import IContractRepository
 from src.domain.interfaces.i_company_repository import ICompanyRepository
-
+from sqlalchemy.orm import Session
 class ContractUseCase:
     def __init__(self, contract_repo: IContractRepository, company_repo: ICompanyRepository):
         self.contract_repo = contract_repo
@@ -36,8 +36,10 @@ class ContractUseCase:
         )
         return self.contract_repo.create_contract(contract, company_id)
 
-    def list_contracts(self) -> List[Contract]:
-        return self.contract_repo.get_contracts()
+    def list_contracts(self, db: Session, page: int = 1, page_size: int = 10, sort_by: str = "signing_date", order: str = "asc"):
+        return self.contract_repo.list_contracts(
+            db, page, page_size, sort_by, order
+        )
 
     def delete_contract(self, contract_id: int) -> bool:
         return self.contract_repo.delete_contract(contract_id)

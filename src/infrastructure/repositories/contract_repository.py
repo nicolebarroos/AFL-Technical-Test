@@ -4,6 +4,7 @@ from src.domain.entities.company import Company
 from src.domain.entities.contract import Contract
 from src.domain.interfaces.i_contract_repository import IContractRepository
 from src.infrastructure.database import db_instance
+from sqlalchemy import desc, asc
 
 class ContractRepository(IContractRepository):
     def __init__(self):
@@ -40,4 +41,30 @@ class ContractRepository(IContractRepository):
 
     def get_contract_by_id(self, contract_id: int) -> Optional[Contract]:
         return self.db.query(Contract).filter(Contract.id == contract_id).first()
+    
+    def list_contracts(self, db: Session, page: int, page_size: int, sort_by: str, order: str):
+        sort_column = getattr(Contract, sort_by, None)
+        if not sort_column:
+            raise ValueError(f"Invalid sort_by column: {sort_by}")
+        order_by = asc(sort_column) if order == "asc" else desc(sort_column)
+        query = db.query(Contract).order_by(order_by)
 
+        total = query.count()
+        contracts = query.offset((page - 1) * page_size).limit(page_size).all()
+
+        contracts_dict = [
+            {
+                "id": contract.id,
+                "cliente": contract.company.nickname,
+                "validity_date": contract.validity_date.strftime("%d-%m-%Y"),
+                "signing_date": contract.signing_date.strftime("%d-%m-%Y"),
+                "fee": contract.fee,
+                "services": contract.services,
+            }
+            for contract in contracts
+        ]
+
+        return {
+            "total": total,
+            "contracts": contracts_dict,
+        }
