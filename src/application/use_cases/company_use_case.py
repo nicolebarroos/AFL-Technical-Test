@@ -26,6 +26,7 @@ class CompanyUseCase:
         company = self.company_repository.get_company_by_id(company_id)
         if not company:
             return False
+
         try:
             self.company_repository.delete_company(company_id)
             return True

@@ -60,12 +60,9 @@ def list_companies(use_case: CompanyUseCase = Depends(get_company_use_case)):
 
 @router.delete("/delete_company/{company_id}")
 def delete_company(company_id: int, use_case: CompanyUseCase = Depends(get_company_use_case)):
-    try:
-        success = use_case.delete_company(company_id)
-        if not success:
-            raise HTTPException(status_code=404, detail="Company not found")
-        return {"message": "Company deleted"}
-    except ValueError as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+    success = use_case.delete_company(company_id)
+
+    if not success:
+        raise HTTPException(status_code=404, detail="Company not found")
+
+    return {"message": "Company deleted"}

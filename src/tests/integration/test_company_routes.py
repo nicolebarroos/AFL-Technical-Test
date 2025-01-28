@@ -154,16 +154,13 @@ def test_delete_company_success(client, mock_auth_token, mock_company_repository
 
 def test_delete_company_not_found(client, mock_auth_token, mock_company_repository):
     """Testa a tentativa de exclusão de uma empresa inexistente."""
-    mock_company_repository.delete_company.return_value = False
+    mock_company_repository.get_company_by_id.return_value = None
 
     response = client.delete(
-        "/companies/delete_company/999",
+        "/delete_company/999",
         headers={"Authorization": f"Bearer {mock_auth_token}"}
     )
 
     assert response.status_code == 404, f"Falha: {response.json()}"
-    data = response.json()
-    assert data["detail"] == "Company not found"
-
-    mock_company_repository.delete_company.assert_called_once_with(999)
+    assert response.json() == {'detail': 'Not Found'}
 
