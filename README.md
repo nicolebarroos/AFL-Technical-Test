@@ -1,51 +1,101 @@
-# 📌 FastAPI - Empresas - Contratos
+# 📌 FastAPI - Empresas e Contratos  
 
-## 🎯 Objetivo
-Desenvolver uma aplicação que contenha **empresas e seus contratos**, permitindo a criação, listagem, gerenciamento dessas entidades e métricas específicas.
+## 🎯 Objetivo  
+Desenvolver uma aplicação que contenha **empresas e seus contratos**, permitindo a **criação, listagem, gerenciamento** dessas entidades e **métricas específicas**.  
 
 ---
 
-## 🚀 **1. Como Iniciar o Projeto**
+## 🚀 Como Iniciar o Projeto  
 
-### 🔹 **1.1 Requisitos**
-Antes de iniciar, certifique-se de ter os seguintes requisitos instalados:
-- **Python 3.10+**
-- **Poetry** (Gerenciador de dependências)
-- **Docker & Docker Compose**
+### 🔹 Requisitos  
+Antes de iniciar, certifique-se de ter os seguintes requisitos instalados:  
+- **Python 3.10+**  
+- **Poetry** (Gerenciador de dependências)  
+- **Docker & Docker Compose**  
 
-### 🔹 **1.2 Clonando o Repositório**
+### 🔹 Clonando o Repositório  
 ```bash
 git clone https://github.com/nicolebarroos/AFL-Technical-Test.git
 cd seu-repo
 ```
 
-### 🔹 **1.3 Criando e Configurando o Ambiente**
-**Configure as variáveis de ambiente**
-   ```bash
-   cp .env.example .env
-   nano .env  #Edite com suas credenciais
-   ```
-**Gerando uma SECRET_KEY para autenticação JWT**
-   Para gerar uma chave secreta segura para JWT, execute o seguinte comando no terminal:
-   ```bash
-   openssl rand -hex 32
-   ```
-   Copie a chave gerada e adicione ao arquivo `.env`:
-   ```ini
-   SECRET_KEY=chave-gerada-aqui
-   ```
+### 🔹 Criando e Configurando o Ambiente  
 
-### 🔹 **1.4 Rodando o Projeto**
-
-#### 🔹 **Executar com Docker**
+#### **1. Configurar as Variáveis de Ambiente**  
 ```bash
-docker-compose up --build
+cp .env.example .env
+nano .env  # Edite com suas credenciais
 ```
-Acesse a API em [`http://localhost:8008/docs`](http://localhost:8008/docs)
+
+#### **2. Gerar uma SECRET_KEY para autenticação JWT**  
+Execute o seguinte comando no terminal:  
+```bash
+openssl rand -hex 32
+```
+Copie a chave gerada e adicione ao arquivo `.env`:  
+```ini
+SECRET_KEY=chave-gerada-aqui
+```
 
 ---
 
-## 🌐 2. Deploy da Aplicação
-A aplicação foi implantada em uma instância EC2 da AWS, e o banco de dados está hospedado no RDS. Você pode acessar a API diretamente através do seguinte endereço:
+## 🚀 Rodando o Projeto  
 
-http://18.204.211.139:8008/docs/
+### 🔹 Executar com Docker  
+```bash
+docker-compose up --build
+```
+Acesse a API em [`http://localhost:8008/docs`](http://localhost:8008/docs).  
+
+---
+
+## 🧪 Rodando os Testes  
+
+### 🔹 Executar os testes dentro do contêiner  
+Acesse o contêiner:  
+```bash
+docker exec -it fastapi_container bash
+```
+Dentro do contêiner, execute os testes com:  
+```bash
+poetry run pytest -v
+```
+Ou simplesmente:  
+```bash
+pytest
+```
+
+---
+
+## 🏗 Arquitetura do Projeto  
+
+A aplicação segue os princípios da **Arquitetura Limpa**, separando bem as responsabilidades em diferentes camadas:  
+
+📂 **Camada de Aplicação (`app/use_cases`)**  
+- Contém os **casos de uso** (use cases), que definem a lógica da aplicação sem depender da infraestrutura.  
+
+📂 **Camada de Domínio (`app/domain`)**  
+- Define as **entidades principais** do sistema e suas interfaces.  
+
+📂 **Camada de Infraestrutura (`app/infrastructure`)**  
+- Implementa os **repositórios** que interagem com o banco de dados.  
+
+📂 **Camada de Interface (`app/interfaces`)**  
+- Contém os **controllers** (responsáveis pelos endpoints) e **schemas** (validações de entrada e saída de dados).  
+
+🔹 **Benefícios:**  
+✅ **Baixo acoplamento**  
+✅ **Alta coesão**  
+✅ **Facilidade na manutenção e escalabilidade**  
+
+---
+
+## 🌐 Deploy da Aplicação  
+
+A aplicação foi implantada em uma **instância EC2 da AWS**, e o banco de dados está hospedado no **Amazon RDS**.  
+
+🔗 **Acesse a API em:**  
+[`http://18.204.211.139:8008/docs/`](http://18.204.211.139:8008/docs/)  
+
+---
+
