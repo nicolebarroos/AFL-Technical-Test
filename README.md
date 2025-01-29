@@ -1,7 +1,7 @@
-# 📌 FastAPI - Empresas e Contratos
+# 📌 FastAPI - Empresas - Contratos
 
 ## 🎯 Objetivo
-Desenvolver uma aplicação que contenha **empresas e seus contratos**, permitindo a criação, listagem e gerenciamento dessas entidades.
+Desenvolver uma aplicação que contenha **empresas e seus contratos**, permitindo a criação, listagem, gerenciamento dessas entidades e métricas específicas.
 
 ---
 
@@ -44,3 +44,8 @@ docker-compose up --build
 Acesse a API em [`http://localhost:8008/docs`](http://localhost:8008/docs)
 
 ---
+
+## 🌐 2. Deploy da Aplicação
+A aplicação foi implantada em uma instância EC2 da AWS, e o banco de dados está hospedado no RDS. Você pode acessar a API diretamente através do seguinte endereço:
+
+http://18.204.211.139:8008/docs/
