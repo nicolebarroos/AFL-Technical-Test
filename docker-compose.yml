@@ -5,10 +5,8 @@ services:
     image: postgres:13
     container_name: postgres_container
     restart: always
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: company_contracts_db
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:
@@ -20,11 +18,11 @@ services:
     restart: always
     depends_on:
       - db
-    environment:
-      DATABASE_URL: postgresql://user:password@db:5432/company_contracts_db
+    env_file:
+      - .env
     ports:
       - "8008:8008"
-    command: ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8008"]
+    command: ["poetry", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8008"]
 
 volumes:
   postgres_data:
