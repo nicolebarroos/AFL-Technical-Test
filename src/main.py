@@ -13,7 +13,3 @@ app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 app.include_router(company_router, prefix="/companies", tags=["Companies"])
 app.include_router(contract_router, prefix="/contracts", tags=["Contracts"])
 app.include_router(metrics_router, prefix="/metrics", tags=["Metrics"])
-
-@app.get("/")
-def root():
-    return {"message": "Hello, FastAPI!"}

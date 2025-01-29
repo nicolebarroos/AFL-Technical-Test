@@ -11,7 +11,7 @@
             "args": [
                 "src.main:app",     // Ajuste para o local do seu FastAPI, ex.: main:app
                 "--host", "0.0.0.0",
-                "--port", "8000",
+                "--port", "8008",
                 "--reload"          // Auto-reload em ambiente de dev
             ],
             // Variáveis de ambiente
