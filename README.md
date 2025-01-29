@@ -30,7 +30,7 @@ nano .env  # Edite com suas credenciais
 #### **2. Gerar uma SECRET_KEY para autenticação JWT**  
 Execute o seguinte comando no terminal:  
 ```bash
-openssl rand -hex 32
+python -c "import secrets; print(secrets.token_hex(32))"
 ```
 Copie a chave gerada e adicione ao arquivo `.env`:  
 ```ini
