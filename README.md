@@ -88,14 +88,3 @@ A aplicação segue os princípios da **Arquitetura Limpa**, separando bem as re
 ✅ **Alta coesão**  
 ✅ **Facilidade na manutenção e escalabilidade**  
 
----
-
-## 🌐 Deploy da Aplicação  
-
-A aplicação foi implantada em uma **instância EC2 da AWS**, e o banco de dados está hospedado no **Amazon RDS**.  
-
-🔗 **Acesse a API em:**  
-[`http://18.204.211.139:8008/docs/`](http://18.204.211.139:8008/docs/)  
-
----
-
